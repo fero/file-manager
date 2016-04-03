@@ -1,0 +1,15 @@
+{
+  "name": "layout",
+  "version": "1.0.0",
+  "description": "View layout to display file structure and previewer",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Dumtiru <vctr.dumtiru@gmail.com>",
+  "license": "MIT"
+}

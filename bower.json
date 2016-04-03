@@ -1,0 +1,24 @@
+{
+  "name": "layout",
+  "description": "View layout to display file structure and previewer",
+  "main": "main.js",
+  "authors": [
+    "Victor Dumtiru <vctr.dumitru@gmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.2",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "fontawesome#^4.5.0",
+    "jquery-ui": "jqueryui#^1.11.4"
+  }
+}
