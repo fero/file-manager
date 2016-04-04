@@ -5,35 +5,44 @@ module.exports = function (grunt) {
     grunt.initConfig({
         bowercopy: {
             css: {
-                "options": {
-                    "destPrefix": 'css'
+                options: {
+                    destPrefix: 'css'
                 },
-                "files": {
+                files: {
                     'font-awesome.css': 'font-awesome/css/font-awesome.min.css',
-                    'bootstrap.min.css': 'bootstrap/dist/css/bootstrap.min.css',
-                    'bootstrap.min.css.map': 'bootstrap/dist/css/bootstrap.min.css.map'
+                    'bootstrap.css': 'bootstrap/dist/css/bootstrap.min.css',
+                    'bootstrap.css.map': 'bootstrap/dist/css/bootstrap.min.css.map',
+                    'jqtree.css': 'jqtree/jqtree.css'
                 },
             },
             libs: {
-                "options": {
-                    "destPrefix": 'js/libs'
+                options: {
+                    destPrefix: 'js/libs'
                 },
-                "files": {
+                files: {
                     'jquery.js': 'jquery/dist/jquery.min.js',
                     'bootstrap.js': 'bootstrap/dist/js/bootstrap.min.js',
                     'jqueryui.js': 'jquery-ui/jquery-ui.min.js'
                 }
             },
-            fonts: {
-                "options": {
-                    "destPrefix": 'fonts'
+            plugins: {
+                options: {
+                    destPrefix: 'js/plugins'
                 },
-                "files": {
-                    'font-awesome-webfont.eot': 'font-awesome/fonts/fontawesome-webfont.eot',
-                    'font-awesome-webfont.svg': 'font-awesome/fonts/fontawesome-webfont.svg',
-                    'font-awesome-webfont.ttf': 'font-awesome/fonts/fontawesome-webfont.ttf',
-                    'font-awesome-webfont.woff': 'font-awesome/fonts/fontawesome-webfont.woff',
-                    'font-awesome-webfont.woff2': 'font-awesome/fonts/fontawesome-webfont.woff2',
+                files: {
+                    'jquery.jqtree.js': 'jqTree/tree.jquery.js'
+                }
+            },
+            fonts: {
+                options: {
+                    destPrefix: 'fonts'
+                },
+                files: {
+                    'fontawesome-webfont.eot': 'font-awesome/fonts/fontawesome-webfont.eot',
+                    'fontawesome-webfont.svg': 'font-awesome/fonts/fontawesome-webfont.svg',
+                    'fontawesome-webfont.ttf': 'font-awesome/fonts/fontawesome-webfont.ttf',
+                    'fontawesome-webfont.woff': 'font-awesome/fonts/fontawesome-webfont.woff',
+                    'fontawesome-webfont.woff2': 'font-awesome/fonts/fontawesome-webfont.woff2',
                     'FontAwesome.otf': 'font-awesome/fonts/FontAwesome.otf',
 
                     'glyphicons-halflings-regular.eot': 'bootstrap/dist/fonts/glyphicons-halflings-regular.eot',

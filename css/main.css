@@ -1,0 +1,62 @@
+/* ************* UI Layout Styles ************** */
+.ui-layout-west {
+    overflow: auto;
+}
+
+.ui-layout-resizer {
+    background-color: #FFFFFF;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+.ui-layout-resizer.ui-draggable-handle {
+    background: url("../img/handle_v.gif") 100% 50% no-repeat transparent;
+}
+/* *********** End UI Layout Styles ************ */
+
+
+/* *************** jqTree Styles *************** */
+ul.jqtree-tree .jqtree-title {
+    color: #545454;
+}
+
+ul.jqtree-tree .jqtree-title {
+    white-space: nowrap;
+    outline: none;
+}
+
+ul.jqtree-tree .jqtree-title .tree-icon {
+    width: 23px;
+}
+
+.jqtree-element .jqtree-toggler {
+    width: 14px;
+    float: left;
+}
+
+.jqtree-element .jqtree-toggler > .tree-expander {
+    font-size: 19px;
+    color: #545454;
+}
+
+ul.jqtree-tree li.jqtree-selected > .jqtree-element, ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
+    background: #4f85bb;
+    background: -moz-linear-gradient(top,  #4f85bb 0%, #4f85bb 100%);
+    background: -webkit-linear-gradient(top,  #4f85bb 0%,#4f85bb 100%);
+    background: linear-gradient(to bottom,  #4f85bb 0%,#4f85bb 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f85bb', endColorstr='#4f85bb',GradientType=0 );
+    text-shadow: none;
+}
+ul.jqtree-tree li.jqtree-selected > .jqtree-element .jqtree-toggler .tree-expander {
+    color: #FFF;
+}
+
+ul.jqtree-tree li.jqtree_common > .jqtree-element {
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+ul.jqtree-tree li.jqtree-selected > .jqtree-element .jqtree-title {
+    color: #FFF;
+}
+/* ************* End jqTree Styles ************* */
