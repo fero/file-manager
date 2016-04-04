@@ -1,7 +1,7 @@
 ;$(function() {
     "use strict";
 
-    $('body').layout({
+    $('#view-page').layout({
         applyDefaultStyles: false
         , spacing_open: 6
         , west: {
@@ -9,6 +9,22 @@
             size: 300
         }
     });
+
+    var editor = CodeMirror.fromTextArea($(".file-preview")[0], {
+        lineNumbers: true
+        , readOnly: true
+        , styleActiveLine: false
+        , matchBrackets: true
+        , theme: 'neat'
+        , smartIndent: true
+        , indentWithTabs: true
+        , keyMap: 'sublime'
+        , mode: "text/x-php"
+        , scrollbarStyle: "simple"
+    });
+
+    // editor.setSize("100%", 700)
+    console.log(editor)
 
     var treeView = $('#tree-view')
         , previewPane = $('#preview-pane');

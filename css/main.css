@@ -1,7 +1,46 @@
+/* ************** Specific Styles ************** */
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+/* ************ End Specific Styles ************ */
+
+#view-page {
+    height: 100%;
+    margin: 50px;
+    box-sizing: border-box;
+}
+
+#preview-pane {
+    height: 100%;
+}
+
+#preview-pane .main {
+    height: 100%;
+    margin-top: -50px;
+    padding-top: 50px;
+}
+
+#preview-pane .main .no-file {
+    height: 100%;
+    text-align: center;
+    padding-top: 200px;
+    font-size: 40px;
+    background-color: #FDFDFD;
+    color: #EAEAEA;
+}
+
+.CodeMirror { height: 100% !important; }
+
+.CodeMirror-cursor { visibility: hidden; }
+
 /* ************* UI Layout Styles ************** */
 .ui-layout-west {
     overflow: auto;
-    border-right: 1px solid #DDDDDD;
+    border: 1px solid #DDDDDD;
     border-radius: 5px;
 }
 
@@ -16,7 +55,7 @@
 
 .ui-draggable-dragging {
     border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+    border: 1px solid #DDDDDD;
     width: 8px !important;
 }
 

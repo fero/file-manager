@@ -15,22 +15,37 @@
         <link rel="stylesheet" href="css/jqtree.css">
         <link rel="stylesheet" href="css/main.css">
 
+        <!-- ######### Here comes CodeMirror ######### -->
+        <link rel="stylesheet" href="css/codemirror.css">
+        <!-- <link rel="stylesheet" href="css/codemirror/theme/ambiance.css"> -->
+        <link rel="stylesheet" href="css/codemirror/theme/neat.css">
+        <!-- <link rel="stylesheet" href="css/codemirror/theme/mbo.css"> -->
+        <link rel="stylesheet" href="css/codemirror/addon/scroll/simplescrollbars.css">
+        <!-- ################ PHIEW.. ################ -->
+
         <script src="js/libs/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
-        <div class="ui-layout-west">
-            <div id="tree-view"></div>
-        </div>
-        <div class="ui-layout-center">
-            <div id="preview-pane">
-                <div class="top">
-                    <div class="path"></div>
-                    <div class="action"></div>
-                </div>
-                <div class="main"></div>
-                <div class="bottom"></div>
+        <section id="view-page">
+            <div class="ui-layout-west">
+                <div id="tree-view"></div>
             </div>
-        </div>
+            <div class="ui-layout-center">
+                <div id="preview-pane">
+                    <div class="top">
+                        <div class="path"></div>
+                        <div class="action"></div>
+                    </div>
+                    <div class="main">
+                        <div class="no-file">
+                            Select a file to preview it
+                        </div>
+                        <textarea class="file-preview" name="file-preview"></textarea>
+                    </div>
+                    <div class="bottom"></div>
+                </div>
+            </div>
+        </section>
 
         <!-- JS Libraries -->
         <script src="js/libs/jquery.js"></script>
@@ -41,6 +56,20 @@
         <!-- JS Plugins -->
         <script src="js/plugins/jquery.layout-latest.js"></script>
         <script src="js/plugins/jquery.jqtree.js"></script>
+
+        <!-- ######### Here comes CodeMirror ######### -->
+        <script src="js/libs/codemirror.js"></script>
+        <script src="js/plugins/codemirror/addon/edit/matchbrackets.js"></script>
+        <script src="js/plugins/codemirror/addon/selection/active-line.js"></script>
+        <script src="js/plugins/codemirror/addon/scroll/simplescrollbars.js"></script>
+        <script src="js/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+        <script src="js/plugins/codemirror/mode/css/css.js"></script>
+        <script src="js/plugins/codemirror/mode/clike/clike.js"></script>
+        <script src="js/plugins/codemirror/mode/xml/xml.js"></script>
+        <script src="js/plugins/codemirror/mode/php/php.js"></script>
+        <script src="js/plugins/codemirror/keymap/sublime.js"></script>
+        <!-- ################ PHIEW.. ################ -->
+
         <!-- End JS Plugins -->
         <script src="js/main.js"></script>
     </body>
