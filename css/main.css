@@ -1,12 +1,23 @@
 /* ************* UI Layout Styles ************** */
 .ui-layout-west {
     overflow: auto;
+    border-right: 1px solid #DDDDDD;
+    border-radius: 5px;
+}
+
+.ui-layout-center {
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
 }
 
 .ui-layout-resizer {
     background-color: #FFFFFF;
+}
+
+.ui-draggable-dragging {
     border-left: 1px solid #DDDDDD;
     border-right: 1px solid #DDDDDD;
+    width: 8px !important;
 }
 
 .ui-layout-resizer.ui-draggable-handle {
@@ -14,6 +25,19 @@
 }
 /* *********** End UI Layout Styles ************ */
 
+#preview-pane > .top {
+    height: 50px;
+    border-bottom: 1px solid #DDD;
+    background-color: #F5F5F5;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#preview-pane > .top > .path {
+    font-size: 12px;
+    color: #A9A9A9;
+    padding: 4px;
+}
 
 /* *************** jqTree Styles *************** */
 ul.jqtree-tree .jqtree-title {
@@ -54,6 +78,10 @@ ul.jqtree-tree li.jqtree-selected > .jqtree-element .jqtree-toggler .tree-expand
 ul.jqtree-tree li.jqtree_common > .jqtree-element {
     padding: 2px 5px;
     border-radius: 2px;
+}
+
+ul.jqtree-tree li.jqtree_common > .jqtree-element.hovered {
+    background-color: #F3F6F9;
 }
 
 ul.jqtree-tree li.jqtree-selected > .jqtree-element .jqtree-title {

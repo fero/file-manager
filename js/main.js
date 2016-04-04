@@ -1,19 +1,23 @@
-$(function() {
+;$(function() {
+    "use strict";
+
     $('body').layout({
         applyDefaultStyles: false
-        , spacing_open: 7
+        , spacing_open: 6
         , west: {
             closable: false,
             size: 300
         }
-    })
+    });
 
     var treeView = $('#tree-view')
+        , previewPane = $('#preview-pane');
+
     treeView
         .tree({
             closedIcon: $('<i>').addClass('fa fa-caret-right tree-expander'),
             openedIcon: $('<i>').addClass('fa fa-caret-down tree-expander'),
-            dataUrl: '/treedata.json',
+            dataUrl: './treedata.json',
             onCreateLi: function (node, li) {
                 li.find('[role="treeitem"]:first').prepend(
                     $('<i>')
@@ -24,25 +28,47 @@ $(function() {
         })
         .on('tree.click', function(event) {
             if (event.node.is_open) {
-                treeView.tree('closeNode', event.node)
+                treeView.tree('closeNode', event.node);
             } else {
-                treeView.tree('openNode', event.node)
+                treeView.tree('openNode', event.node);
             }
-            
-            return !event.node.isDir
+
+            previewPane.find(' > .top').trigger('nav:select', [event.node])
+
+            return !event.node.isDir;
         })
         .on('tree.open', function(event) {
-            var nodeIcon = $(event.node.element).find(' > .jqtree-element > .jqtree-title > .tree-icon')
+            var nodeIcon = $(event.node.element).find(' > .jqtree-element > .jqtree-title > .tree-icon');
 
             if (nodeIcon.hasClass('fa-folder')) {
-                nodeIcon.removeClass('fa-folder').addClass('fa-folder-open')
+                nodeIcon.removeClass('fa-folder').addClass('fa-folder-open');
             }
         })
         .on('tree.close', function(event) {
-            var nodeIcon = $(event.node.element).find(' > .jqtree-element > .jqtree-title > .tree-icon')
+            var nodeIcon = $(event.node.element).find(' > .jqtree-element > .jqtree-title > .tree-icon');
 
             if (nodeIcon.hasClass('fa-folder-open')) {
-                nodeIcon.removeClass('fa-folder-open').addClass('fa-folder')
+                nodeIcon.removeClass('fa-folder-open').addClass('fa-folder');
             }
         })
+        .on('mouseenter', '.jqtree-element', function(event) {
+            treeView.find('.jqtree-element').removeClass('hovered');
+
+            var row = $(event.target);
+            row.addClass('hovered');
+        })
+        .on('mouseleave', '.jqtree-element', function(event) {
+            var row = $(event.target);
+            row.removeClass('hovered');
+        })
+
+        previewPane.find(' > .top')
+            .on('nav:select', function (event, node) {
+                var $this = $(this)
+                    , pathPlaceholder = $this.find('.path');
+
+                pathPlaceholder
+                    .empty()
+                    .append(node.path);
+            })
 }())
