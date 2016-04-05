@@ -28,15 +28,30 @@
     <body>
         <section id="view-page">
             <div class="ui-layout-west">
-                <div id="tree-view"></div>
+                <div class="nav-pane">
+                    <div class="top">
+                        <div class="title">
+                            EMGCTF-1884
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <div id="tree-view"></div>
+                    </div>
+                </div>
             </div>
             <div class="ui-layout-center">
-                <div id="preview-pane">
+                <div class="preview-pane">
                     <div class="top">
                         <div class="path"></div>
-                        <div class="action"></div>
+                        <div class="actions">
+                            <a href="#" class="run-test">Run</a>
+                        </div>
                     </div>
                     <div class="main">
+                        <div class="loading">
+                            <i class="fa fa-circle-o-notch fa-spin spinner"></i>
+                        </div>
                         <div class="no-file">
                             Select a file to preview it
                         </div>

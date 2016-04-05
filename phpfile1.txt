@@ -1,0 +1,245 @@
+<?php
+namespace Emag\Core\CodeceptionBundle\Controller;
+
+use Emag\Core\CodeceptionBundle\Entity\Distribution;
+use Emag\Core\CodeceptionBundle\Entity\GitCest;
+use Emag\Core\CodeceptionBundle\Service\CestGitService;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Emag\Core\CodeceptionBundle\Entity\GitCestDistribution;
+use Emag\Core\CodeceptionBundle\Entity\Stack;
+use Emag\Core\CodeceptionBundle\Form\CestType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+class CestController extends Controller
+{
+    public $config = array(
+        'userBehaviorFilters' => 'filters_cest',
+        'actionsOnPage' => array(),
+    );
+
+    private function getConfig($key = '')
+    {
+        if (array_key_exists($key, $this->config) && $this->config[$key]) {
+            return $this->config[$key];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function indexAction(Request $request)
+    {
+        $cestGitService = $this->get('emag_codeception.service.cestgit');
+
+        $user = $this->getUser();
+        $session = $request->getSession();
+        $userBehavior = $session->get($this->getConfig('userBehaviorFilters'), array());
+
+        $formFilterType = new CestType($user, $userBehavior);
+
+        $form = $this->createForm(
+            $formFilterType,
+            array(),
+            array(
+                'em' => $cestGitService->getManager(),
+            )
+        );
+
+        return $this->render(
+            'EmagCoreCodeceptionBundle:Grid:cestList.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function listAction(Request $request)
+    {
+        $params = $request->request->all();
+        $service = $this->get('emag_codeception.service.cestgit');
+        $gitCests = $service->getListQueryBuilder($params);
+
+        return new JsonResponse($gitCests);
+    }
+
+
+    /**
+     * @param GitCest $cestGit
+     * @return Response
+     */
+    public function viewAction(GitCest $cestGit)
+    {
+        return $this->render(
+            'EmagCoreCodeceptionBundle:Grid:cestFolderList.html.twig',
+            array(
+                'cestGit' => $cestGit
+            )
+        );
+    }
+
+    /**
+     * @param GitCest $cestGit
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function viewListAction(GitCest $cestGit, Request $request)
+    {
+        $params = $request->request->all();
+        /** @var CestGitService $service */
+        $service = $this->get('emag_codeception.service.cestgit');
+        $gitCests = $service->getGitCestFiles($cestGit, $params);
+
+        return new JsonResponse($gitCests);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function runFormAction(Request $request)
+    {
+        $distributionId = $request->get('distributionId');
+        $filePath = $request->get('filePath');
+
+        return $this->render(
+            'EmagCoreCodeceptionBundle:Cest:runFormModal.html.twig',
+            array(
+                'filePath' => $filePath,
+                'distributionId' => $distributionId,
+            )
+        );
+    }
+
+
+    /**
+     * @ParamConverter("distribution", class="EmagCoreCodeceptionBundle:Distribution", options={"id" = "distributionId"})
+     * @ParamConverter("stack", class="EmagCoreCodeceptionBundle:Stack", options={"id" = "stackId"})
+     * @param Distribution $distribution
+     * @param Stack $stack
+     * @return JsonResponse
+     */
+    public function checkStackAgainstGitCestAction(Distribution $distribution, Stack $stack)
+    {
+        $response = $this->get('emag_codeception.service.cestgit')->checkStackAgainstGitCest($distribution, $stack);
+
+        return new JsonResponse($response);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function editGitAction(Request $request)
+    {
+        $twigParameters = array(
+            'git_cest_id' => null,
+            'git_cest' => null,
+            'gitcest_distribution' => null,
+            'distributions' => null,
+            'team' => null,
+        );
+
+        $user = $this->getUser();
+        $twigParameters['team'] = $this->get('doctrine')
+            ->getManager()
+            ->getRepository('EmagCoreCodeceptionBundle:Team')
+            ->getTeam($user);
+
+        $twigParameters['git_cest_id'] = $request->get('id');
+        if ($twigParameters['git_cest_id']) {
+            $service = $this->get('emag_codeception.service.cestgit');
+            $gitCest = $service->findById($twigParameters['git_cest_id']);
+            if ($gitCest instanceof GitCest) {
+                $twigParameters['git_cest'] = $gitCest;
+                $twigParameters['gitcest_distribution'] = $gitCest->getGitCestDistributions();
+            }
+        }
+
+        $distributionService = $this->get('emag_codeception.service.distribution');
+        $twigParameters['distributions'] = $distributionService->findBy(array('status' => 1));
+
+        return $this->render('EmagCoreCodeceptionBundle:Cest:edit.html.twig', $twigParameters);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function saveGitAction(Request $request)
+    {
+        $params = $request->request->all();
+        /** @var CestGitService $service */
+        $service = $this->get('emag_codeception.service.cestgit');
+
+        if ($request->isMethod('POST')) {
+            $service->saveCestGit($params);
+        }
+
+        return $this->redirectToRoute('emag_core.codeception.application.cest.index');
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function importFormAction(Request $request)
+    {
+        $distributions = [];
+        $gitCestId = $request->get('gitCestId');
+        /** @var CestGitService $service */
+        $service = $this->get('emag_codeception.service.cestgit');
+        $gitCest = $service->findById($gitCestId);
+
+        if ($gitCest instanceof GitCest) {
+            foreach ($gitCest->getGitCestDistributions() as $gitCestDistribution) {
+                /** @var GitCestDistribution $gitCestDistribution */
+                $distributions[] = $gitCestDistribution->getDistribution();
+            }
+        }
+
+        return $this->render(
+            'EmagCoreCodeceptionBundle:Cest:importFormModal.html.twig',
+            array(
+                'distributions' => $distributions,
+                'gitcestId' => $gitCestId,
+            )
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function runImportAction(Request $request)
+    {
+        $distributionId = $request->get('distributionId');
+        $gitCestId = $request->get('gitCestId');
+        $branch = $request->get('branchName');
+
+        $gitCest = $this->get('emag_codeception.service.cestgit')->findById($gitCestId);
+        $distribution = $this->get('emag_codeception.service.distribution')->findById($distributionId);
+
+        $producer = $this->get('old_sound_rabbit_mq.import_cest_producer');
+        $producer->publish(serialize([
+            'cestId' => $gitCest->getId() ?: 0,
+            'distributionName' => $distribution->getName() ?: 0,
+            'branch' => $branch,
+        ]));
+
+        return new Response('Job queued');
+    }
+}

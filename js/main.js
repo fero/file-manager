@@ -1,4 +1,4 @@
-;$(function() {
+$(function() {
     "use strict";
 
     $('#view-page').layout({
@@ -23,33 +23,26 @@
         , scrollbarStyle: "simple"
     });
 
-    // editor.setSize("100%", 700)
-    console.log(editor)
-
     var treeView = $('#tree-view')
-        , previewPane = $('#preview-pane');
+        , previewPane = $('.preview-pane')
+        , previewPaneLoading = previewPane.find(' > .main .loading')
+        , previewPaneNoFile = previewPane.find(' > .main .no-file');
 
     treeView
         .tree({
-            closedIcon: $('<i>').addClass('fa fa-caret-right tree-expander'),
-            openedIcon: $('<i>').addClass('fa fa-caret-down tree-expander'),
-            dataUrl: './treedata.json',
-            onCreateLi: function (node, li) {
+            closedIcon: $('<i>').addClass('fa fa-caret-right tree-expander')
+            , openedIcon: $('<i>').addClass('fa fa-caret-down tree-expander')
+            , dataUrl: './treedata.json'
+
+            , onCreateLi: function (node, li) {
                 li.find('[role="treeitem"]:first').prepend(
-                    $('<i>')
-                        .addClass(node.isDir ? "fa fa-folder tree-icon" : "fa fa fa fa-file-code-o tree-icon")
-                        .addClass(node.hasRunOption ? "blue" : "")
+                    $('<i>').addClass(node.isDir ? "fa fa-folder tree-icon" : "fa fa fa fa-file-code-o tree-icon")
                 )
             }
         })
         .on('tree.click', function(event) {
-            if (event.node.is_open) {
-                treeView.tree('closeNode', event.node);
-            } else {
-                treeView.tree('openNode', event.node);
-            }
-
-            previewPane.find(' > .top').trigger('nav:select', [event.node])
+            treeView.tree(event.node.is_open ? 'closeNode' : 'openNode', event.node);
+            previewPane.find(' > .top').trigger('nav:select', [event.node]);
 
             return !event.node.isDir;
         })
@@ -70,21 +63,39 @@
         .on('mouseenter', '.jqtree-element', function(event) {
             treeView.find('.jqtree-element').removeClass('hovered');
 
-            var row = $(event.target);
-            row.addClass('hovered');
+            $(event.target).addClass('hovered');
         })
         .on('mouseleave', '.jqtree-element', function(event) {
-            var row = $(event.target);
-            row.removeClass('hovered');
-        })
+            $(event.target).removeClass('hovered');
+        });
 
         previewPane.find(' > .top')
             .on('nav:select', function (event, node) {
-                var $this = $(this)
-                    , pathPlaceholder = $this.find('.path');
+                var pathPlaceholder = $(this).find('.path')
+                    , actionsPlaceholder = $(this).find('.actions')
 
-                pathPlaceholder
-                    .empty()
-                    .append(node.path);
-            })
-}())
+                if (node.isDir) return false;
+
+                actionsPlaceholder.hide();
+                previewPaneLoading.show();
+                pathPlaceholder.empty().append(node.relativePath);
+
+                $.ajax({
+                    url: /*viewFileRoute() || */'http://file-manager.lc/phpfile1.txt'
+                    , dataType: 'html' 
+                    , data: {
+                        path: node.path || ''
+                    } 
+                    , type: 'POST' 
+                    , success: function(response) {
+                        if (typeof response === 'string') {
+                            editor.setValue(response);
+
+                            previewPaneLoading.hide();
+                            previewPaneNoFile.hide();
+                            actionsPlaceholder.show();
+                        }
+                    }
+                });
+            });
+}());
