@@ -1,7 +1,7 @@
 $(function() {
     "use strict";
 
-    $('#view-page').layout({
+    $('#view-code-section').layout({
         applyDefaultStyles: false
         , spacing_open: 6
         , west: {
@@ -41,6 +41,10 @@ $(function() {
             }
         })
         .on('tree.click', function(event) {
+            if ($(event.node.element).hasClass('jqtree-selected')) {
+                return false;
+            }
+
             treeView.tree(event.node.is_open ? 'closeNode' : 'openNode', event.node);
             previewPane.find(' > .top').trigger('nav:select', [event.node]);
 
@@ -81,7 +85,7 @@ $(function() {
                 pathPlaceholder.empty().append(node.relativePath);
 
                 $.ajax({
-                    url: /*viewFileRoute() || */'http://file-manager.lc/phpfile1.txt'
+                    url: 'http://file-manager.lc/phpfile1.txt'
                     , dataType: 'html' 
                     , data: {
                         path: node.path || ''
@@ -98,4 +102,4 @@ $(function() {
                     }
                 });
             });
-}());
+});
